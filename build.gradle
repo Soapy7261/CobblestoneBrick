@@ -12,6 +12,7 @@ repositories {
 dependencies {
     api 'org.jetbrains:annotations:20.1.0'
     api 'org.slf4j:slf4j-api:1.7.36'
+    api 'org.json:json:20211205'
 
     implementation 'org.apache.commons:commons-collections4:4.4'
 
