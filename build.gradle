@@ -15,6 +15,7 @@ dependencies {
     api 'org.json:json:20211205'
 
     implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'org.reflections:reflections:0.10.2'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
