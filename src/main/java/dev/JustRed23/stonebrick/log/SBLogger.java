@@ -40,7 +40,7 @@ public class SBLogger {
     public static Logger getLogger(String name) {
         synchronized (LOGGERS) {
             return SLF4J_ENABLED ? LoggerFactory.getLogger(name)
-                    : LOGGERS.computeIfAbsent(name, FallbackLogger::new);
+                    : LOGGERS.computeIfAbsent(name, SBFallback::new);
         }
     }
 
@@ -48,7 +48,7 @@ public class SBLogger {
         synchronized (LOGGERS) {
             return SLF4J_ENABLED ?
                     LoggerFactory.getLogger(clazz)
-                    : LOGGERS.computeIfAbsent(clazz.getName(), s -> new FallbackLogger(clazz.getSimpleName()));
+                    : LOGGERS.computeIfAbsent(clazz.getName(), s -> new SBFallback(clazz.getSimpleName()));
         }
     }
 
