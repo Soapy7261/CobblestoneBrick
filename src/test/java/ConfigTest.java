@@ -22,8 +22,13 @@ class ConfigTest {
     }
 
     @Test
-    void testConfig() throws ConfigInitializationException {
+    void testConfig() {
+        assertDoesNotThrow(Config::initialize);
+    }
+
+    @Test
+    void testThrows() throws ConfigInitializationException {
         Config.initialize();
-        assertNull(Config.get("keythatdoesnotexist"));
+        assertThrows(IllegalStateException.class, Config::initialize);
     }
 }

@@ -2,8 +2,6 @@ package dev.JustRed23.stonebrick.cfg;
 
 import dev.JustRed23.stonebrick.cfg.parsers.IParser;
 import dev.JustRed23.stonebrick.exeptions.ConfigInitializationException;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 
 import java.io.*;
@@ -154,18 +152,5 @@ public final class Config {
                 e.printStackTrace();
             }
         });
-    }
-
-    @Nullable
-    public static Parseable get(@NotNull Object key) {
-        //TODO loop through first value aka name of class + get code
-        if (key == "hello") return new Parseable("world");
-        return null;
-    }
-
-    @NotNull
-    public static Parseable getOrDefault(@NotNull Object key, @NotNull Object defaultValue) {
-        Parseable value = get(key);
-        return value == null ? new Parseable(defaultValue) : value;
     }
 }
