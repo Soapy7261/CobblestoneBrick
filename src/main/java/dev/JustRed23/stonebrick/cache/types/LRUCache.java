@@ -23,7 +23,7 @@ public class LRUCache<K, V> implements ICache<K, V> {
     public LRUCache(@Range(from = 1, to = Integer.MAX_VALUE) int timeToLive, @NotNull TimeUnit unit, @Range(from = 1, to = Integer.MAX_VALUE) int maxSize) {
         this.timeToLiveMs = unit.toMillis(timeToLive);
         this.lru = new LRUMap<>(maxSize);
-        LOGGER.debug("Creating cache with a max size of {} and time to live of {} ms", maxSize, timeToLiveMs);
+        LOGGER.debug("Creating cache with a max size of {} and a time to live of {} ms", maxSize, timeToLiveMs);
 
         Thread cleanupThread = new Thread(() -> {
             while (true) {
@@ -57,12 +57,13 @@ public class LRUCache<K, V> implements ICache<K, V> {
                 key = itr.next();
                 cacheObject = itr.getValue();
 
-                if (cacheObject != null && (now > (timeToLiveMs + cacheObject.lastAccessedMs)))
+                if (cacheObject != null && (now >= (timeToLiveMs + cacheObject.lastAccessedMs)))
                     deleteKey.add(key);
             }
         }
 
         for (K key : deleteKey) {
+            LOGGER.debug("Key {} reached time to live. Removing from cache", key);
             remove(key);
             Thread.yield();
         }
