@@ -1,11 +1,13 @@
 package dev.JustRed23.stonebrick.cache;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Optional;
 
 public interface ICache<K, V> {
-    boolean set(K key, V value);
-    Optional<V> get(K key);
-    void remove(K key);
+    void put(@NotNull K key, @NotNull V value);
+    Optional<V> get(@NotNull K key);
+    void remove(@NotNull K key);
     int size();
     boolean isEmpty();
     void clear();
