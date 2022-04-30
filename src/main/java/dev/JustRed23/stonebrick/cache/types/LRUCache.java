@@ -1,6 +1,5 @@
 package dev.JustRed23.stonebrick.cache.types;
 
-import dev.JustRed23.stonebrick.cache.CacheObject;
 import dev.JustRed23.stonebrick.cache.ICache;
 import dev.JustRed23.stonebrick.log.SBLogger;
 import org.apache.commons.collections4.MapIterator;
