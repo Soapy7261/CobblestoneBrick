@@ -14,6 +14,8 @@ dependencies {
     api 'org.slf4j:slf4j-api:1.7.36'
     api 'org.json:json:20220320'
 
+    api 'org.jooq:jooq:3.16.6'
+
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'org.reflections:reflections:0.10.2'
 
