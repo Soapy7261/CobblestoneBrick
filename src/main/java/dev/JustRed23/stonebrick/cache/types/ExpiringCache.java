@@ -25,35 +25,47 @@ public class ExpiringCache<K, V> implements ICache<K, V> {
     }
 
     public void put(@NotNull K key, @NotNull V value) {
-        cache.put(key, new CacheObject<>(value));
+        synchronized (cache) {
+            cache.put(key, new CacheObject<>(value));
+        }
     }
 
     public Optional<V> get(@NotNull K key) {
-        if (cache.containsKey(key)) {
-            CacheObject<V> cacheObject = cache.get(key);
-            long now = System.currentTimeMillis();
+        synchronized (cache) {
+            if (cache.containsKey(key)) {
+                CacheObject<V> cacheObject = cache.get(key);
+                long now = System.currentTimeMillis();
 
-            if (now >= cacheObject.lastAccessedMs + timeToLiveMs) {
-                LOGGER.debug("Key {} reached time to live. Removing from cache", key);
-                cache.remove(key);
-            } else return Optional.of(cacheObject.value);
+                if (now >= cacheObject.lastAccessedMs + timeToLiveMs) {
+                    LOGGER.debug("Key {} reached time to live. Removing from cache", key);
+                    cache.remove(key);
+                } else return Optional.of(cacheObject.value);
+            }
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
     public void remove(@NotNull K key) {
-        cache.remove(key);
+        synchronized (cache) {
+            cache.remove(key);
+        }
     }
 
     public int size() {
-        return cache.size();
+        synchronized (cache) {
+            return cache.size();
+        }
     }
 
     public boolean isEmpty() {
-        return cache.isEmpty();
+        synchronized (cache) {
+            return cache.isEmpty();
+        }
     }
 
     public void clear() {
-        cache.clear();
+        synchronized (cache) {
+            cache.clear();
+        }
     }
 }
