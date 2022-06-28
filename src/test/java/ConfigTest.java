@@ -1,4 +1,4 @@
-import dev.JustRed23.stonebrick.cfg.Parseable;
+import dev.JustRed23.stonebrick.util.Parseable;
 import dev.JustRed23.stonebrick.cfg.Config;
 import dev.JustRed23.stonebrick.exeptions.ConfigInitializationException;
 import org.junit.jupiter.api.Test;
