@@ -38,7 +38,7 @@ public final class Config {
         mapParsers();
 
         configurations = new HashMap<>();
-        mapConfigurables();
+        mapConfigurables("dev.JustRed23");
         createConfigurationIfNotExist();
 
         applyFromFile();
@@ -67,10 +67,10 @@ public final class Config {
         });
     }
 
-    private static void mapConfigurables() {
+    private static void mapConfigurables(String packageName) {
         System.out.println("==========Mapping configurables==========");
-        Reflections reflections = new Reflections("dev.JustRed23");
-        System.out.println("Looking for classes annotated with " + Configurable.class.getSimpleName() + " in package 'dev.JustRed23'");
+        Reflections reflections = new Reflections(packageName);
+        System.out.println("Looking for classes annotated with " + Configurable.class.getSimpleName() + " in package '" + packageName + "'");
         reflections.getTypesAnnotatedWith(Configurable.class).forEach(configClass -> {
             System.out.println("\tFound config class: " + configClass.getSimpleName());
             System.out.println("\t\tLooking for fields annotated with " + ConfigField.class.getSimpleName());
