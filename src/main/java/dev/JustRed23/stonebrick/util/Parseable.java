@@ -1,4 +1,4 @@
-package dev.JustRed23.stonebrick.cfg;
+package dev.JustRed23.stonebrick.util;
 
 public record Parseable(Object value) {
 
