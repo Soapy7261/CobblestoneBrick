@@ -1,5 +1,5 @@
 import dev.JustRed23.stonebrick.cfg.Config;
-import dev.JustRed23.stonebrick.exeptions.ConfigInitializationException;
+import dev.JustRed23.stonebrick.exceptions.ConfigInitializationException;
 import dev.JustRed23.stonebrick.log.SBLogger;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

@@ -1,6 +1,6 @@
 package dev.JustRed23.stonebrick.net;
 
-import dev.JustRed23.stonebrick.exeptions.NetRequestException;
+import dev.JustRed23.stonebrick.exceptions.NetRequestException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

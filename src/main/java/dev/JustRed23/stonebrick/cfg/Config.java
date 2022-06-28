@@ -1,7 +1,7 @@
 package dev.JustRed23.stonebrick.cfg;
 
 import dev.JustRed23.stonebrick.cfg.parsers.IParser;
-import dev.JustRed23.stonebrick.exeptions.ConfigInitializationException;
+import dev.JustRed23.stonebrick.exceptions.ConfigInitializationException;
 import dev.JustRed23.stonebrick.util.TripletMap;
 import org.reflections.Reflections;
 

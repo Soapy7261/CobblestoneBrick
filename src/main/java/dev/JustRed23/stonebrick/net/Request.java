@@ -1,6 +1,6 @@
 package dev.JustRed23.stonebrick.net;
 
-import dev.JustRed23.stonebrick.exeptions.NetRequestException;
+import dev.JustRed23.stonebrick.exceptions.NetRequestException;
 import dev.JustRed23.stonebrick.util.StreamUtils;
 
 import java.io.ByteArrayOutputStream;

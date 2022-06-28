@@ -1,7 +1,7 @@
 import dev.JustRed23.stonebrick.cache.types.ExpiringCache;
 import dev.JustRed23.stonebrick.cache.types.LRUCache;
 import dev.JustRed23.stonebrick.cfg.Config;
-import dev.JustRed23.stonebrick.exeptions.ConfigInitializationException;
+import dev.JustRed23.stonebrick.exceptions.ConfigInitializationException;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;

@@ -1,6 +1,6 @@
 package dev.JustRed23.stonebrick.net;
 
-import dev.JustRed23.stonebrick.exeptions.NetResponseException;
+import dev.JustRed23.stonebrick.exceptions.NetResponseException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

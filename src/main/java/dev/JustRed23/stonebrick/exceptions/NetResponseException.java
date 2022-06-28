@@ -1,4 +1,4 @@
-package dev.JustRed23.stonebrick.exeptions;
+package dev.JustRed23.stonebrick.exceptions;
 
 import dev.JustRed23.stonebrick.net.Response;
 import org.jetbrains.annotations.NotNull;
