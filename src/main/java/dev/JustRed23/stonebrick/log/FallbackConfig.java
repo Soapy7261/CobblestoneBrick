@@ -4,11 +4,7 @@ import dev.JustRed23.stonebrick.cfg.ConfigField;
 import dev.JustRed23.stonebrick.cfg.Configurable;
 
 @Configurable
-public class FallbackConfig {
-
-    private FallbackConfig() {
-        throw new IllegalStateException("Configuration class");
-    }
+public final class FallbackConfig {
 
     @ConfigField(defaultValue = "true")
     public static boolean SHOW_LOG_NAME;
@@ -25,6 +21,6 @@ public class FallbackConfig {
     @ConfigField(defaultValue = "System.out")
     public static String LOG_LOCATION;
 
-    @ConfigField(defaultValue = "INFO")
+    @ConfigField(defaultValue = "INFO", optional = true)
     public static LogLevel DEFAULT_LOG_LEVEL;
 }

@@ -2,6 +2,7 @@ package dev.JustRed23.stonebrick.cfg;
 
 import dev.JustRed23.stonebrick.cfg.parsers.IParser;
 import dev.JustRed23.stonebrick.exeptions.ConfigInitializationException;
+import dev.JustRed23.stonebrick.util.TripletMap;
 import org.reflections.Reflections;
 
 import java.io.*;
@@ -15,11 +16,7 @@ public final class Config {
     private static final File configDir = new File(System.getProperty("user.dir") + File.separator + "config");
 
     private static Map<Class<?>, IParser<?>> parsers;
-    private static Map<Class<?>, Map<Field, String>> configurations;
-
-    private Config() {
-        throw new IllegalStateException("Utility class");
-    }
+    private static Map<Class<?>, List<TripletMap<Field, String, Boolean>>> configurations;
 
     public static void initialize() throws ConfigInitializationException {
         if (INITIALIZED)
@@ -74,20 +71,24 @@ public final class Config {
         reflections.getTypesAnnotatedWith(Configurable.class).forEach(configClass -> {
             System.out.println("\tFound config class: " + configClass.getSimpleName());
             System.out.println("\t\tLooking for fields annotated with " + ConfigField.class.getSimpleName());
-            Map<Field, String> fieldsWithDefaults = new HashMap<>();
+            List<TripletMap<Field, String, Boolean>> fieldsWithDefaults = new ArrayList<>();
             Arrays.stream(configClass.getDeclaredFields()).forEach(field -> {
                 if (!field.trySetAccessible() || !field.isAnnotationPresent(ConfigField.class))
                     return;
 
                 System.out.println("\t\t\tFound field " + field.getName() + " of type " + field.getType().getSimpleName() + ", setting default value");
-                final String defaultValue = field.getAnnotation(ConfigField.class).defaultValue();
+
+                ConfigField configField = field.getAnnotation(ConfigField.class);
+                String defaultValue = configField.defaultValue();
+                boolean optional = configField.optional();
+
                 try {
                     field.set(field.getType(), parsers.get(field.getType()).parse(defaultValue));
                 } catch (Exception e) {
                     System.err.println("\t\t\tCould not set field " + field.getName() + " to it's default value");
                     e.printStackTrace();
                 }
-                fieldsWithDefaults.put(field, defaultValue);
+                fieldsWithDefaults.add(TripletMap.of(field, defaultValue, optional));
             });
             configurations.put(configClass, fieldsWithDefaults);
         });
@@ -112,7 +113,12 @@ public final class Config {
                 }
 
                 PrintWriter pw = new PrintWriter(configFile);
-                configurations.get(aClass).forEach((field, defaultValue) -> pw.println(field.getName() + "=" + defaultValue));
+                configurations.get(aClass).forEach(triplet -> {
+                    Field field = triplet.first();
+                    String defaultValue = triplet.second();
+
+                    pw.println(field.getName() + "=" + defaultValue);
+                });
                 pw.flush();
                 pw.close();
                 System.out.println("\tCreated file " + cfgName + " with their default values");
@@ -123,8 +129,9 @@ public final class Config {
         });
     }
 
-    private static void applyFromFile() {
+    private static void applyFromFile() throws ConfigInitializationException {
         System.out.println("==========Applying configurations from file==========");
+        List<ConfigInitializationException> exceptions = new ArrayList<>();
         configurations.keySet().forEach(aClass -> {
             String name = aClass.getSimpleName();
             File configFile = new File(System.getProperty("user.dir") + File.separator + "config" + File.separator + name.toLowerCase() + ".cfg");
@@ -134,9 +141,25 @@ public final class Config {
             try (FileInputStream fis = new FileInputStream(configFile)) {
                 prop.load(fis);
 
-                configurations.get(aClass).forEach((field, defaultValue) -> {
+                configurations.get(aClass).forEach(triplet -> {
+                    Field field = triplet.first();
+                    String defaultValue = triplet.second();
+                    boolean optional = triplet.third();
+
                     System.out.println("Setting field " + field.getName());
                     String value = prop.getProperty(field.getName());
+
+                    if (value == null) {
+                        if (optional) {
+                            System.out.println("\tCould not find optional field " + field.getName() + ", setting to default value");
+                            value = defaultValue;
+                        } else {
+                            System.err.println("\tCould not find required field " + field.getName());
+                            exceptions.add(new ConfigInitializationException("Could not find required field " + field.getName() + " in file " + cfgName));
+                            return;
+                        }
+                    }
+
                     if (value.isBlank())
                         value = defaultValue;
 
@@ -152,5 +175,8 @@ public final class Config {
                 e.printStackTrace();
             }
         });
+
+        if (!exceptions.isEmpty())
+            throw new ConfigInitializationException("Could not initialize configurables, check your terminal for more information", exceptions);
     }
 }
