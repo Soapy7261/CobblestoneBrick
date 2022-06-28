@@ -33,10 +33,6 @@ public class SBLogger {
 
     private static final Map<String, Logger> LOGGERS = new CaseInsensitiveMap<>();
 
-    private SBLogger() {
-        throw new IllegalStateException("Utility class");
-    }
-
     public static Logger getLogger(String name) {
         synchronized (LOGGERS) {
             return SLF4J_ENABLED ? LoggerFactory.getLogger(name)
