@@ -4,4 +4,8 @@ public abstract class WebApp implements Application {
     public void init() throws Exception {}
     public abstract void start() throws Exception;
     public abstract void stop() throws Exception;
+
+    public void run() throws Exception {
+        //TODO
+    }
 }
