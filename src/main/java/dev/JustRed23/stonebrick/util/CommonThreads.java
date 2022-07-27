@@ -11,4 +11,16 @@ public final class CommonThreads {
         t.setDaemon(true);
         return t;
     });
+
+    public static ExecutorService appThread = Executors.newFixedThreadPool(4, r -> {
+        Thread t = new Thread(r);
+        t.setName("Application Thread");
+        t.setDaemon(true);
+        return t;
+    });
+
+    public static void shutdown() {
+        networkThread.shutdown();
+        appThread.shutdown();
+    }
 }
