@@ -1,15 +1,16 @@
 package dev.JustRed23.stonebrick.app;
 
 import dev.JustRed23.stonebrick.net.NetworkManager;
+import dev.JustRed23.stonebrick.service.ServicePool;
 import dev.JustRed23.stonebrick.util.Args;
 import dev.JustRed23.stonebrick.util.CommonThreads;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class Application {
 
     private Args args;
+    private final ServicePool servicePool = new ServicePool(this);
 
     protected abstract void init() throws Exception;
     protected abstract void start() throws Exception;
@@ -52,7 +53,6 @@ public abstract class Application {
     }
 
     public static void exit() {
-        NetworkManager.cancelAll();
         Launcher.stop();
     }
 
@@ -82,11 +82,15 @@ public abstract class Application {
     }
 
     //GETTERS
-    public void setArgs(Args args) {
+    void setArgs(Args args) {
         this.args = args;
     }
 
     public Args getArgs() {
         return args;
+    }
+
+    public ServicePool getServicePool() {
+        return servicePool;
     }
 }

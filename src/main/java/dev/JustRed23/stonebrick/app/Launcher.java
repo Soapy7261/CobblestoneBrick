@@ -2,6 +2,8 @@ package dev.JustRed23.stonebrick.app;
 
 import dev.JustRed23.stonebrick.cfg.Config;
 import dev.JustRed23.stonebrick.log.SBLogger;
+import dev.JustRed23.stonebrick.net.NetworkManager;
+import dev.JustRed23.stonebrick.service.ServicePool;
 import dev.JustRed23.stonebrick.util.Args;
 import dev.JustRed23.stonebrick.util.CommonThreads;
 import org.slf4j.Logger;
@@ -100,6 +102,7 @@ class Launcher {
                     try {
                         startCalled.set(true);
                         application.start();
+                        application.getServicePool().start();
                     } catch (Throwable t) {
                         LOGGER.warn("Exception in Application start method");
                         startError = t;
@@ -119,6 +122,8 @@ class Launcher {
                 Application.runAndWait(() -> {
                     try {
                         application.stop();
+                        application.getServicePool().shutdown();
+                        NetworkManager.cancelAll();
                     } catch (Throwable t) {
                         LOGGER.warn("Exception in Application stop method");
                         stopError = t;

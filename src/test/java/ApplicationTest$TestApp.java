@@ -11,15 +11,7 @@ public class ApplicationTest$TestApp extends Application {
 
     protected void start() throws Exception {
         System.out.println("App start");
-        Application.runLater(() -> {
-            try {
-                TimeUnit.SECONDS.sleep(10);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-            exit();
-        });
+        getServicePool().addService(TestService.class);
     }
 
     protected void stop() throws Exception {
