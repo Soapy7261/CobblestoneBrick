@@ -1,6 +1,6 @@
 package dev.JustRed23.stonebrick.app;
 
-public interface Application {
+interface IApplication {
     void init() throws Exception;
     void start() throws Exception;
     void stop() throws Exception;
