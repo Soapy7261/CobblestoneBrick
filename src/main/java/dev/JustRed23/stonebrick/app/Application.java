@@ -1,12 +1,16 @@
 package dev.JustRed23.stonebrick.app;
 
 import dev.JustRed23.stonebrick.net.NetworkManager;
+import dev.JustRed23.stonebrick.util.Args;
 import dev.JustRed23.stonebrick.util.CommonThreads;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class Application {
+
+    private Args args;
+
     protected abstract void init() throws Exception;
     protected abstract void start() throws Exception;
     protected abstract void stop() throws Exception;
@@ -37,7 +41,7 @@ public abstract class Application {
         try {
             Class theClass = Class.forName(callingClassName, false, Thread.currentThread().getContextClassLoader());
             if (Application.class.isAssignableFrom(theClass))
-                Launcher.launchApplication((Class<? extends Application>) theClass, args);
+                launch((Class<? extends Application>) theClass, args);
             else
                 throw new RuntimeException("Error: " + theClass + " does not extend " + Application.class.getCanonicalName());
         } catch (RuntimeException ex) {
@@ -75,5 +79,14 @@ public abstract class Application {
         synchronized (runLock) {
             CommonThreads.appThread.submit(runnable::run);
         }
+    }
+
+    //GETTERS
+    public void setArgs(Args args) {
+        this.args = args;
+    }
+
+    public Args getArgs() {
+        return args;
     }
 }

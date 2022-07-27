@@ -2,6 +2,7 @@ package dev.JustRed23.stonebrick.app;
 
 import dev.JustRed23.stonebrick.cfg.Config;
 import dev.JustRed23.stonebrick.log.SBLogger;
+import dev.JustRed23.stonebrick.util.Args;
 import dev.JustRed23.stonebrick.util.CommonThreads;
 import org.slf4j.Logger;
 
@@ -73,7 +74,7 @@ class Launcher {
                     try {
                         Constructor<? extends Application> c = appClass.getConstructor();
                         app.set(c.newInstance());
-                        //TODO: set args
+                        app.get().setArgs(Args.from(args));
                     } catch (Throwable t) {
                         LOGGER.warn("Exception in Application constructor");
                         constructorError = t;
