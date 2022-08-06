@@ -53,6 +53,7 @@ public class FileStructure {
 
                     try {
                         File file = new File(annotation.name(), dir, annotation.content());
+                        dir.getFiles().add(file);
                         mappedFiles.add(file);
                         field.set(field.getType(), file);
                         System.out.printf("Added file %s%n", file.getPath());

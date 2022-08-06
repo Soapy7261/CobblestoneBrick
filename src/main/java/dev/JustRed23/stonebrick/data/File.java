@@ -24,8 +24,7 @@ public class File {
 
         this.file = new java.io.File(directory.getPath() + java.io.File.separator + name);
         if (!this.file.exists()) {
-            if (!this.file.createNewFile())
-                throw new IOException("Could not create file " + this.file.getPath());
+            createIfNotExist();
             this.content = new ArrayList<>();
         } else this.content = Files.readAllLines(getPath());
 
@@ -71,10 +70,11 @@ public class File {
         }
     }
 
-    public void delete() {
+    public synchronized void delete() {
         try {
             Files.delete(getPath());
             getContent().clear();
+            getDirectory().getFiles().remove(this);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -84,6 +84,8 @@ public class File {
         if (!exists()) {
             try {
                 Files.createFile(getPath());
+                if (!getDirectory().getFiles().contains(this))
+                    getDirectory().getFiles().add(this);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
