@@ -13,8 +13,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static dev.JustRed23.stonebrick.log.LogLevel.*;
 import static dev.JustRed23.stonebrick.log.FallbackConfig.*;
+import static dev.JustRed23.stonebrick.log.LogLevel.*;
 
 class SBFallback extends MarkerIgnoringBase {
 
