@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 public @interface File {
     String name();
     String directory() default "";
-    String content() default "";
+    String[] content() default "";
 }

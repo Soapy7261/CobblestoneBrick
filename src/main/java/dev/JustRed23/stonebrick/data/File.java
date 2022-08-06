@@ -6,47 +6,59 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.List;
 
 public class File {
 
     private final String name;
     private final Directory directory;
-    private final ArrayList<String> content;
+    private final List<String> content;
 
     private final java.io.File file;
 
-    public File(String name, Directory directory, ArrayList<String> content) throws IOException {
+    private final Object WRITELOCK = new Object();
+
+    public File(String name, Directory directory, String[] content) throws IOException {
         this.name = name;
         this.directory = directory;
-        this.content = content;
 
         this.file = new java.io.File(directory.getPath() + java.io.File.separator + name);
         if (!this.file.exists()) {
             if (!this.file.createNewFile())
                 throw new IOException("Could not create file " + this.file.getPath());
+            this.content = new ArrayList<>();
+        } else this.content = Files.readAllLines(getPath());
+
+        if (!isEmpty())
+            return;
+
+        for (String line : content) {
+            writeLine(line);
         }
     }
 
     public File(String name, Directory directory) throws IOException {
-        this(name, directory, new ArrayList<>());
+        this(name, directory, new String[0]);
     }
 
-    public void write(String text) {
+    public synchronized void write(String text) {
         write(text, false);
     }
 
-    public void writeLine(String text) {
+    public synchronized void writeLine(String text) {
         write(text, true);
     }
 
-    private void write(String text, boolean newLine) {
-        try {
-            Files.write(getPath(), text.getBytes(), StandardOpenOption.APPEND);
-            if (newLine)
-                Files.write(getPath(), String.format("%n").getBytes(), StandardOpenOption.APPEND);
-            getContent().add(text);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    private synchronized void write(String text, boolean newLine) {
+        synchronized (WRITELOCK) {
+            try {
+                Files.write(getPath(), text.getBytes(), StandardOpenOption.APPEND);
+                if (newLine)
+                    Files.write(getPath(), String.format("%n").getBytes(), StandardOpenOption.APPEND);
+                getContent().add(text);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -93,7 +105,7 @@ public class File {
     /**
      * @return an array of strings representing the content of the file, every entry is a line of the file (starting from 0)
      */
-    public ArrayList<String> getContent() {
+    public List<String> getContent() {
         return content;
     }
 

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class VersioningTest {
 
     @Test
-    public void testVersioning() throws InterruptedException {
+    void testVersioning() throws InterruptedException {
         BasicVersion v1 = BasicVersion.fromString("1.0.0", new Date());
         BasicVersion v2 = BasicVersion.fromString("1.0.1", new Date());
         TimeUnit.SECONDS.sleep(1);
