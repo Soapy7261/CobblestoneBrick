@@ -15,6 +15,7 @@ public class TestApp extends Application {
     protected void start() throws Exception {
         System.out.println("Started");
         TimeUnit.SECONDS.sleep(10);
+        TestFileStructure.fruits.delete();
         exit();
     }
 
