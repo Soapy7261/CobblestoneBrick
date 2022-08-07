@@ -3,6 +3,8 @@ package dev.JustRed23.stonebrick.net;
 import dev.JustRed23.stonebrick.exceptions.NetResponseException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -78,6 +80,10 @@ public class Response {
         if (data == null || data.length == 0)
             return null;
         return new String(data, StandardCharsets.UTF_8);
+    }
+
+    public Document asHTML() {
+        return Jsoup.parse(asString());
     }
 
     public JSONObject asJSONObject() {
