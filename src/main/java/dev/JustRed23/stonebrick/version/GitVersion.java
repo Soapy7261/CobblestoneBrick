@@ -2,6 +2,8 @@ package dev.JustRed23.stonebrick.version;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.Properties;
 
@@ -11,10 +13,19 @@ public record GitVersion(String gitHash, Date buildTime) implements Version {
         return new GitVersion(version, buildTime);
     }
 
-    public static GitVersion fromFile(File versionFile) {
+    public static GitVersion fromFile(File file) {
+        try {
+            return fromFile(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static GitVersion fromFile(InputStream fileStream) {
         Properties prop = new Properties();
-        try (FileInputStream stream = new FileInputStream(versionFile)) {
-            prop.load(stream);
+        try (fileStream) {
+            prop.load(fileStream);
             return fromString(prop.getProperty("version"), Version.getDateFromString(prop.getProperty("buildTime")));
         } catch (Exception e) {
             e.printStackTrace();

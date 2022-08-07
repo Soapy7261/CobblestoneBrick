@@ -1,7 +1,6 @@
 package dev.JustRed23.stonebrick.version;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.*;
 import java.util.Date;
 import java.util.Properties;
 
@@ -12,10 +11,19 @@ public record BasicVersion(int major, int minor, int patch, Date buildTime) impl
         return new BasicVersion(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]), buildTime);
     }
 
-    public static BasicVersion fromFile(File versionFile) {
+    public static BasicVersion fromFile(File file) {
+        try {
+            return fromFile(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static BasicVersion fromFile(InputStream fileStream) {
         Properties prop = new Properties();
-        try (FileInputStream stream = new FileInputStream(versionFile)) {
-            prop.load(stream);
+        try (fileStream) {
+            prop.load(fileStream);
             return fromString(prop.getProperty("version"), Version.getDateFromString(prop.getProperty("buildTime")));
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,6 +58,6 @@ public record BasicVersion(int major, int minor, int patch, Date buildTime) impl
     }
 
     public String getVersion() {
-        return String.format("%d.%d.%d", major, minor, patch);
+        return patch == 0 ? String.format("%d.%d", major, minor) : String.format("%d.%d.%d", major, minor, patch);
     }
 }
