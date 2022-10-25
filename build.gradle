@@ -17,8 +17,14 @@ dependencies {
     api 'org.jooq:jooq:3.17.4'
     api 'org.jsoup:jsoup:1.15.3'
 
+    api ('com.zaxxer:HikariCP:5.0.1') {
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
+
     implementation 'org.apache.commons:commons-collections4:4.4'
-    implementation 'org.reflections:reflections:0.10.2'
+    implementation ('org.reflections:reflections:0.10.2') {
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
