@@ -14,7 +14,7 @@ dependencies {
     api 'org.slf4j:slf4j-api:2.0.3'
     api 'org.json:json:20220924'
 
-    api 'org.jooq:jooq:3.17.4'
+    api 'org.jooq:jooq:3.17.5'
     api 'org.jsoup:jsoup:1.15.3'
 
     api ('com.zaxxer:HikariCP:5.0.1') {
